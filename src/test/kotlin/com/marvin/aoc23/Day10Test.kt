@@ -29,8 +29,14 @@ class Day10Test {
     }
 
     @Test
-    fun testPart2() {
-        val input = FileUtil.readFileContent("C:\\Users\\Marvin\\IdeaProjects\\aoc23\\src\\main\\resources\\Day10Test.txt")
-        Assertions.assertEquals(2L, Day10().handlePart2(input))
+    fun test1Part2() {
+        val input = FileUtil.readFileContent("C:\\Users\\Marvin\\IdeaProjects\\aoc23\\src\\main\\resources\\day10Test1Part2.txt")
+        Assertions.assertEquals(4, Day10().handlePart2(input))
+    }
+
+    @Test
+    fun test2Part2() {
+        val input = FileUtil.readFileContent("C:\\Users\\Marvin\\IdeaProjects\\aoc23\\src\\main\\resources\\day10Test2Part2.txt")
+        Assertions.assertEquals(1, Day10().handlePart2(input))
     }
 }

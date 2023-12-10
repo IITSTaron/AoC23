@@ -1,23 +1,44 @@
 package com.marvin.aoc23
 
+import kotlin.math.absoluteValue
+
 class Day10: Day {
-    override fun handlePart1(input: String): Any {
+    override fun handlePart1(input: String): Any = calculateVisitedCoords(input).size / 2
+
+    override fun handlePart2(input: String): Any {
+        val visitedCoords = calculateVisitedCoords(input)
+        return calculatePolygonArea(visitedCoords)
+    }
+
+    fun calculatePolygonArea(positions: List<Pair<Int, Int>>): Int {
+        var a = 0
+        var b = 0
+
+        for (x in positions.indices) {
+            a += positions[x].second * positions[(x + 1) % positions.size].first
+            b += positions[x].first * positions[(x + 1) % positions.size].second
+        }
+
+        return ((Math.abs(a - b) / 2.0) - positions.size / 2.0 + 1).toInt()
+    }
+
+    private fun calculateVisitedCoords(input: String): MutableList<Pair<Int, Int>> {
         val map = renderMap(input)
-        var steps = 0
+        val visitedCoords = mutableListOf<Pair<Int, Int>>()
         var (x, y) = identifyStartingCoordinates(map)
         var direction: Direction
         if(map.get(x-1, y) in listOf('-', 'L', 'F')) {
             direction = Direction.LEFT
-        } else if(map.get(x, y-1) in listOf('|', 'F', '7')) {
-            direction = Direction.UP
-        } else if(map.get(x+1, y) in listOf('-', 'J', '7')) {
-            direction = Direction.RIGHT
         } else if(map.get(x, y+1) in listOf('|', 'L', 'J')) {
             direction = Direction.DOWN
+        } else if(map.get(x+1, y) in listOf('-', 'J', '7')) {
+            direction = Direction.RIGHT
+        } else if(map.get(x, y-1) in listOf('|', 'F', '7')) {
+            direction = Direction.UP
         } else {
             error("No passable pipeline could be found around 'S'")
         }
-        steps++
+        visitedCoords.add(x to y)
         while(true) {
             when(direction) {
                 Direction.LEFT -> {
@@ -62,15 +83,11 @@ class Day10: Day {
                 }
             }
             if(map.get(x, y) == 'S') {
-                return steps
+                return visitedCoords
             } else {
-                steps ++
+                visitedCoords.add(x to y)
             }
         }
-    }
-
-    override fun handlePart2(input: String): Any {
-        TODO("Not yet implemented")
     }
 
     enum class Direction { UP, DOWN, LEFT, RIGHT }
